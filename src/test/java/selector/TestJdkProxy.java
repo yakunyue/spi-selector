@@ -18,7 +18,7 @@ import com.yyk.spi.selector.SpiApplicationContext;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TestJavassist {
+public class TestJdkProxy {
 
 
     public static void main(String... args) throws Exception {
@@ -43,7 +43,7 @@ public class TestJavassist {
         });
 
         SpiApplicationContext.setSpiCode("code");
-        IUserService userService = new JdkSpiProxy<IUserService>(IUserService.class,map).getSpiProxy();
+        IUserService userService = new JdkSpiProxy<>(IUserService.class,map).getSpiProxy();
         userService.nihao("yyk");
         System.out.println(userService.hello("a", "b"));
         System.out.println(userService.nihao());

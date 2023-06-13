@@ -3,6 +3,7 @@ package com.yyk.spi.selector;
 import com.yyk.spi.selector.annotation.SpiInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -51,6 +52,11 @@ public class SpiSelectorScanner  extends ClassPathBeanDefinitionScanner {
 
     public void registerFilters() {
         addIncludeFilter(new AnnotationTypeFilter(SpiInterface.class));
-        addExcludeFilter((reader, factory) -> reader.getClassMetadata().getClassName().endsWith("package-info"));
+//        addExcludeFilter((reader, factory) -> reader.getClassMetadata().getClassName().endsWith("package-info"));
+    }
+
+    @Override
+    protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
+        return beanDefinition.getMetadata().isInterface() && beanDefinition.getMetadata().isIndependent();
     }
 }
