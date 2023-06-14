@@ -13,19 +13,22 @@
 package com.yyk.spi.selector;
 
 import com.yyk.spi.selector.annotation.SpiCode;
+import com.yyk.spi.selector.utils.SpELParser;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.expression.Expression;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Component;
 
 /**
  * SpiCode的注解切面
  */
 @Aspect
-@Component
 public class SpiCodeAspect implements InitializingBean {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -34,18 +37,20 @@ public class SpiCodeAspect implements InitializingBean {
      * 方法上
      */
     @Before("@annotation(spiCode)")
-    public void annotationBefore(SpiCode spiCode) {
-        logger.info("set spi code is {}", spiCode.value());
-        SpiApplicationContext.setSpiCode(spiCode.value());
+    public void annotationBefore(SpiCode spiCode, ProceedingJoinPoint joinPoint) {
+        logger.info("method join point,set spi code is {}", spiCode.value());
+        String code = SpELParser.parsString(spiCode.value(),joinPoint);
+        SpiApplicationContext.setSpiCode(code);
     }
 
     @After("@annotation(spiCode)")
     public void annotationAfter(SpiCode spiCode) {
+        logger.info("method join point,clean spi cod,code is {}", spiCode.value());
         SpiApplicationContext.cleanCode();
     }
 
     /**
-     * 类
+     * 类上
      */
     @Before("@within(spiCode)")
     public void within(SpiCode spiCode) {

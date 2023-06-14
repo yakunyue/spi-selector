@@ -18,15 +18,10 @@ import java.util.Map;
  */
 class SpiSelectorProxyFactory<T> implements FactoryBean<T>, InitializingBean, ApplicationContextAware {
 
-    /*slf4j日志*/
     private Logger logger = LoggerFactory.getLogger(getClass());
-    /*通过构造方法注入设置*/
     private Class<T> spiInterface;
-    /*spring的上下文*/
     private ApplicationContext applicationContext;
-    /*spring上下文的bean的映射*/
     private Map<String, T> beans;
-    /*接口上的注解*/
     private SpiInterface spiInterfaceAnnotation;
 
     SpiSelectorProxyFactory(Class<T> spiInterface) {

@@ -43,7 +43,10 @@ public class JdkSpiProxy<T> implements InvocationHandler {
         if (StringUtils.isEmpty(code)) {
             code = spiInterfaceAnna.defaultCode();
         }
-        return method.invoke(beans.get(code), args);
+        final T bean = beans.get(code);
+        if (bean == null)
+            throw new RuntimeException(String.format("Spi select failed,code=%s,spiInterface=%s", code, spiInterface.getName()));
+        return method.invoke(bean, args);
     }
 
     /**
