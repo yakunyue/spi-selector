@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class SpELParser {
 
 
-    private static final Pattern SPEL_PATTERN = Pattern.compile("^(#|\\$)\\{.*}$");
+    private static final Pattern SPEL_PATTERN = Pattern.compile("^[$#].*");
     private static final SpelExpressionParser parser = new SpelExpressionParser();
     private static final DefaultParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
@@ -34,5 +34,9 @@ public class SpELParser {
         if (SPEL_PATTERN.matcher(spelStr).matches())
             return pars(spelStr, joinPoint, String.class);
         return spelStr;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(SPEL_PATTERN.matcher("$param.a").matches());
     }
 }

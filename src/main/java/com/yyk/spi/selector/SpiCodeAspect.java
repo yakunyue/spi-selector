@@ -21,14 +21,10 @@ import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.expression.Expression;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.stereotype.Component;
 
 /**
  * SpiCode的注解切面
  */
-@Aspect
 public class SpiCodeAspect implements InitializingBean {
 
     private Logger logger = LoggerFactory.getLogger(getClass());

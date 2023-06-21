@@ -1,6 +1,8 @@
 package com.yyk.spi.selector;
 
 import com.yyk.spi.selector.annotation.SpiInterface;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.InvocationHandler;
@@ -12,6 +14,8 @@ import java.util.Map;
  * spi service的动态代理
  */
 public class JdkSpiProxy<T> implements InvocationHandler {
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * spi的代理接口
@@ -46,6 +50,7 @@ public class JdkSpiProxy<T> implements InvocationHandler {
         final T bean = beans.get(code);
         if (bean == null)
             throw new RuntimeException(String.format("Spi select failed,code=%s,spiInterface=%s", code, spiInterface.getName()));
+        logger.info("Spi select success,code={},bean={}", code, bean);
         return method.invoke(bean, args);
     }
 

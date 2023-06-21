@@ -10,16 +10,18 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.core.type.filter.AssignableTypeFilter;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 
-public class SpiSelectorScanner  extends ClassPathBeanDefinitionScanner {
+public class SpiSelectorScanner extends ClassPathBeanDefinitionScanner {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     public SpiSelectorScanner(BeanDefinitionRegistry registry) {
-        super(registry,false);
+        super(registry, false);
     }
 
     @Override
@@ -52,11 +54,12 @@ public class SpiSelectorScanner  extends ClassPathBeanDefinitionScanner {
 
     public void registerFilters() {
         addIncludeFilter(new AnnotationTypeFilter(SpiInterface.class));
+        addIncludeFilter(new AssignableTypeFilter(SpiCodeAspect.class));
 //        addExcludeFilter((reader, factory) -> reader.getClassMetadata().getClassName().endsWith("package-info"));
     }
 
     @Override
     protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
-        return beanDefinition.getMetadata().isInterface() && beanDefinition.getMetadata().isIndependent();
+        return (beanDefinition.getMetadata().isInterface() && beanDefinition.getMetadata().isIndependent());
     }
 }
