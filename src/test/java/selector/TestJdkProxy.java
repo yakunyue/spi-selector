@@ -26,7 +26,8 @@ public class TestJdkProxy {
         map.put("code", new IUserService() {
             @Override
             public String hello(String name, String age) {
-                return name + "=" + age;
+                throw new RuntimeException("test");
+//                return name + "=" + age;
             }
 
             @Override

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
@@ -51,7 +52,11 @@ public class JdkSpiProxy<T> implements InvocationHandler {
         if (bean == null)
             throw new RuntimeException(String.format("Spi select failed,code=%s,spiInterface=%s", code, spiInterface.getName()));
         logger.info("Spi select success,code={},bean={}", code, bean);
-        return method.invoke(bean, args);
+        try {
+            return method.invoke(bean, args);
+        } catch (InvocationTargetException e) {
+            throw e.getTargetException(); // 抛出原始异常，不做包装
+        }
     }
 
     /**
